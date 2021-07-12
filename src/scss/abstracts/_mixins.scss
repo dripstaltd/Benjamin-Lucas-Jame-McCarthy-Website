@@ -1,0 +1,84 @@
+// Clear inner floats
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+// Helper to size an element
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin flexColWrap {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
+  -webkit-flex-flow: column wrap;
+  -moz-flex-flow: column wrap;
+  flex-flow: column wrap;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-align-content: center;
+  align-content: center;
+}
+@mixin flexCol {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
+  -webkit-flex-flow: column wrap;
+  -moz-flex-flow: column wrap;
+  flex-flow: column wrap;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-align-content: center;
+  align-content: center;
+}
+
+@mixin flex-item {
+  -webkit-flex: 1 auto;
+  -moz-flex: 1 auto;
+  flex: 1 auto;
+  align-self: auto;
+}
+
+@mixin center {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin centerInner {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/// Responsive breakpoint manager
+/// @access public
+/// @param {String} $breakpoint - Breakpoint
+/// @requires $breakpoints
+
+@mixin respond-to($breakpoint) {
+  $raw-query: map-get($breakpoints, $breakpoint);
+
+  @if $raw-query {
+    $query: if(
+      type-of($raw-query) == 'string',
+      unquote($raw-query),
+      inspect($raw-query)
+    );
+
+    @media #{$query} {
+      @content;
+    }
+  } @else {
+    @error 'No value found for `#{$breakpoint}`. '
+         + 'Please make sure it is defined in `$breakpoints` map.';
+  }
+}
