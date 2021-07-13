@@ -1,0 +1,5 @@
+
+.parcel-cache
+.prettierrc
+node_modules
+dist

@@ -1,0 +1,29 @@
+{
+  "name": "benljmccarthysite",
+  "version": "1.0.0",
+  "description": "Resume Website Portfolio",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build --no-source-maps index.html --dist-dir ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dripstaltd/Benjamin-Lucas-Jame-McCarthy-Website.git"
+  },
+  "author": "Benjamin McCarthy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dripstaltd/Benjamin-Lucas-Jame-McCarthy-Website/issues"
+  },
+  "homepage": "https://github.com/dripstaltd/Benjamin-Lucas-Jame-McCarthy-Website#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0-nightly.651",
+    "parcel": "^2.0.0-nightly.447",
+    "sass": "^1.32.11"
+  },
+  "dependencies": {
+    "core-js": "^3.15.2",
+    "regenerator-runtime": "^0.13.7"
+  }
+}
