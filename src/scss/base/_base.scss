@@ -1,28 +1,32 @@
-html {
-  font-size: 62.5%;
+$bp-large: 78.15em; // 1250px
+$bp-medium: 61.25em; // 980px
+$bp-small: 37.5em; // 600px
+$bp-smallest: 31.25em; // 500px
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
-$breakpoints: (
-  'small': (
-    min-width: 800px,
-  ),
-  'medium': (
-    min-width: 1000px,
-  ),
-  'big': (
-    min-width: 1200px,
-  ),
-);
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
 
-/* horizontal & vertical centering */
-.center {
-  display: table;
-  width: 100%;
-  height: 100%;
+html {
+  font-size: 62.5%;
+  font-family: 'Saira', sans-serif;
+}
 
-  &__inner {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
-  }
+body {
+  height: 100vh;
+  width: 100vw;
+  color: #efefef;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
