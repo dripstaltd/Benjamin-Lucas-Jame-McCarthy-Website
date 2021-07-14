@@ -14,7 +14,22 @@
         <source src="src/assets/video/video.mp4" type="video/mp4" />
       </video>
       <div class="header-content">
-        <h1 class="header-content--title">Ambitious JavaScript Developer. Creative & Determined</h1>
+        <div class="header-content--top"></div>
+        <div class="header-content--main">
+          <h1 class="header-content--title">Ambitious JavaScript Developer. Creative & Determined</h1>
+        </div>
+        <div class="header-content--modal">
+          <button class="show-modal">Show modal 1</button>
+          <button class="show-modal">Show modal 2</button>
+          <button class="show-modal">Show modal 3</button>
+          <div class="modal hidden">
+            <button class="close-modal">&times;</button>
+            <h1>I'm a modal window 😍</h1>
+            <p>Lorem ipsum dolor sit.</p>
+          </div>
+          <div class="overlay hidden"></div>
+        </div>
+        <div class="header-content--foot"></div>
       </div>
     </header>
     <div id="app"></div>

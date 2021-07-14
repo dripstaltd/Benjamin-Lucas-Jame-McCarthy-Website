@@ -1,3 +1,7 @@
+'use strict';
+
+export const state = {};
+
 export const data1 = [1, 3, 5, 7, 8];
 
 export const profile = {
