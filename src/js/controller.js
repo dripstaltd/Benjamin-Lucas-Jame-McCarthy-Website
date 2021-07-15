@@ -1,7 +1,7 @@
 'use strict';
 import * as model from './model.js';
 import modalView from './views/modalView.js';
-
+import canvasView from './views/canvasView.js';
 /*
 const data = model.data1;
 const newData = data.map(item => item * 7);
@@ -19,6 +19,10 @@ newData.forEach(item => {
 modalView.render(model.profile);
 modalView.openCloseModal();
 
-const init = () => {};
+// Creating a new player
+
+const init = () => {
+  canvasView.init();
+};
 
 init();
