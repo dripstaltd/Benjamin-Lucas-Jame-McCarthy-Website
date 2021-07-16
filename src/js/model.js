@@ -96,13 +96,15 @@ class Enemy extends CircleProperties {
 
 // =============================================
 // Create player
-const player = new Player(x, y, 30, 'purple');
+const player = new Player(x, y, 10, 'white');
 // Store Projectiles
 const projectiles = [];
 // Store Enemies
 const enemies = [];
 // Spawn Enemies
 function spawnEnemies() {
+  // Speed Multiplier
+  const enemySpeed = 1;
   setInterval(() => {
     const radius = Math.random() * (30 - 5) + 5;
     let x;
@@ -119,8 +121,8 @@ function spawnEnemies() {
     const angle = Math.atan2(window.innerHeight / 2 - y, window.innerWidth / 2 - x);
     // Calculating velocities
     const velocity = {
-      x: Math.cos(angle),
-      y: Math.sin(angle),
+      x: Math.cos(angle) * enemySpeed,
+      y: Math.sin(angle) * enemySpeed,
     };
     enemies.push(new Enemy(x, y, radius, color, velocity));
   }, 1000);
@@ -130,6 +132,8 @@ let animationId;
 // Animation loop
 function animate() {
   animationId = requestAnimationFrame(animate);
+  // background
+  c.fillStyle = 'rgba(0, 0, 0, 0.1)';
   c.clearRect(0, 0, window.innerWidth, window.innerHeight);
   player.draw();
   projectiles.forEach((projectile, i) => {
@@ -151,10 +155,11 @@ function animate() {
   enemies.forEach((enemy, i) => {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+    // End Game
     if (dist - enemy.radius - player.radius < 1) {
-      console.log('GAME OVER');
       cancelAnimationFrame(animationId);
-      canvas.style.backgroundColor = 'red';
+      console.log('GAME OVER');
+      // canvas.style.backgroundColor = 'red';
     }
     projectiles.forEach((projectile, index) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
@@ -176,10 +181,10 @@ addEventListener('click', e => {
   const angle = Math.atan2(e.clientY - y, e.clientX - x);
   // Calculating velocities
   const velocity = {
-    x: Math.cos(angle),
-    y: Math.sin(angle),
+    x: Math.cos(angle) * 2,
+    y: Math.sin(angle) * 2,
   };
-  projectiles.push(new Projectile(x, y, 5, 'red', velocity));
+  projectiles.push(new Projectile(x, y, 2, 'white', velocity));
 });
 // ---------------------------------------------------------------------
 animate();
