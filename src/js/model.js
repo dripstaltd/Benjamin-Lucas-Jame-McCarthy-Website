@@ -125,17 +125,28 @@ function spawnEnemies() {
     enemies.push(new Enemy(x, y, radius, color, velocity));
   }, 1000);
 }
-
+// ---------------------------------------------------------------------
 let animationId;
 // Animation loop
 function animate() {
   animationId = requestAnimationFrame(animate);
   c.clearRect(0, 0, window.innerWidth, window.innerHeight);
   player.draw();
-  projectiles.forEach(projectile => {
+  projectiles.forEach((projectile, i) => {
     projectile.update();
+    // Remove projectiles from edge of screen
+    if (
+      projectile.x - projectile.radius <= 0 ||
+      projectile.x - projectile.radius > window.innerWidth ||
+      projectile.y - projectile.radius < 0 ||
+      projectile.y - projectile.radius > window.innerHeight
+    ) {
+      setTimeout(() => {
+        projectiles.splice(i, 1);
+      }, 0);
+    }
   });
-
+  // ---------------------------------------------------------------------
   // Enemies Loop
   enemies.forEach((enemy, i) => {
     enemy.update();
@@ -157,10 +168,10 @@ function animate() {
     });
   });
 }
-
+// ---------------------------------------------------------------------
 // Rendering a projectile on mouse click event at the location of mouse
-
 addEventListener('click', e => {
+  console.log(projectiles);
   // Distance from click to center
   const angle = Math.atan2(e.clientY - y, e.clientX - x);
   // Calculating velocities
@@ -168,9 +179,9 @@ addEventListener('click', e => {
     x: Math.cos(angle),
     y: Math.sin(angle),
   };
-
   projectiles.push(new Projectile(x, y, 5, 'red', velocity));
 });
+// ---------------------------------------------------------------------
 animate();
 spawnEnemies();
 // Projectile physics
