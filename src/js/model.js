@@ -41,6 +41,8 @@ export const expertise = {
   },
 };
 //-|--------------------------------------------|
+// export const scoreEl = +document.querySelector('#score').textContent;
+export const scoreEl = document.querySelector('#score');
 export const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 export const x = window.innerWidth / 2;
@@ -56,6 +58,10 @@ const particles = [];
 const enemySpeed = 0.7;
 // Particle slow down
 const friction = 0.99;
+// Score
+
+
+console.log(scoreEl);
 //-|--------------------------------------------|
 class CircleProperties {
   constructor(x, y, radius, color) {
@@ -162,8 +168,10 @@ function spawnEnemies() {
     enemies.push(new Enemy(x, y, radius, color, velocity));
   }, 1000);
 }
-// ---------------------------------------------------------------------
+// ------------------------------------------------------------
+
 let animationId;
+let score = 0;
 // Animation loop
 function animate() {
   animationId = requestAnimationFrame(animate);
@@ -215,6 +223,10 @@ function animate() {
       };
       // enemy and projectiles touch
       if (dist - enemy.radius - projectile.radius < 1) {
+        // increase score
+        score += 2;
+        scoreEl.textContent = `${score}`
+        console.log(score);
         // creating particle explosions
         for (let i = 0; i < enemy.radius * 2; i++) {
           particles.push(
@@ -241,7 +253,6 @@ function animate() {
 // ---------------------------------------------------------------------
 // Rendering a projectile on mouse click event at the location of mouse
 addEventListener('click', e => {
-  console.log(projectiles);
   // Distance from click to center
   const angle = Math.atan2(e.clientY - y, e.clientX - x);
   // Calculating velocities

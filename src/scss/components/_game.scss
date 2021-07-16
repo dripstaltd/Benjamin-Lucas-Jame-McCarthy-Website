@@ -1,0 +1,17 @@
+
+
+.score {
+  @include unselectable;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  font-size: 1.6rem;
+  &__label {
+    color: #28b487;
+  }
+  &__value {
+    color: #efefef;
+  }
+
+}
