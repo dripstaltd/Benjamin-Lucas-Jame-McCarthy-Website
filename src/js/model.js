@@ -10,10 +10,10 @@ export const profile = {
 };
 
 export const person = {
-  name: 'Benjamin L J McCarthy',
-  location: 'Sunbury TW16 5HT',
-  contact: '07496649975',
-  email: 'lukasmacuk@gmail.com',
+  name: 'Benjamin McCarthy',
+  location: 'Suury TW1 5',
+  contact: '0749',
+  email: 'lukack@gmail.com',
   github: 'https://github.com/dripstaltd',
 };
 
@@ -40,11 +40,23 @@ export const expertise = {
       'Ability to learn and self develop skills using: MDN - W3Schools - Udemy - Adobe-suite Full - Envato Elements - HostGatorShared - developer Mozilla, Codepen – GitHub',
   },
 };
+//-|--------------------------------------------|
 export const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 export const x = window.innerWidth / 2;
 export const y = window.innerHeight / 2;
 
+// Store Projectiles
+const projectiles = [];
+// Store Enemies
+const enemies = [];
+// Store particles
+const particles = [];
+// Speed Multiplier
+const enemySpeed = 0.7;
+// Particle slow down
+const friction = 0.99;
+//-|--------------------------------------------|
 class CircleProperties {
   constructor(x, y, radius, color) {
     this.x = x;
@@ -59,6 +71,7 @@ class CircleProperties {
     c.fill();
   }
 }
+//-|--------------------------------------------|
 export class Player extends CircleProperties {
   //BUG When resizing window
   constructor(x, y, radius, color) {
@@ -66,47 +79,69 @@ export class Player extends CircleProperties {
   }
 }
 
+//-|--------------------------------------------|
 export class Projectile extends CircleProperties {
   // Creating a projectile
   constructor(x, y, radius, color, velocity) {
     super(x, y, radius, color);
     this.velocity = velocity;
   }
-
   update() {
     this.draw();
     this.x = this.x + this.velocity.x;
     this.y = this.y + this.velocity.y;
   }
 }
-
+//-|--------------------------------------------|
 class Enemy extends CircleProperties {
   // Creating a projectile
   constructor(x, y, radius, color, velocity) {
     super(x, y, radius, color);
     this.velocity = velocity;
   }
-
   update() {
     this.draw();
     this.x = this.x + this.velocity.x;
     this.y = this.y + this.velocity.y;
   }
 }
+//-|--------------------------------------------|
+class Particle {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = velocity;
+    this.alpha = 1;
+  }
+  draw() {
+    c.save();
+    c.globalAlpha = this.alpha;
+    c.beginPath();
+    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    c.fillStyle = this.color;
+    c.fill();
+    c.restore();
+  }
+  update() {
+    this.draw();
+    this.velocity.x *= friction;
+    this.velocity.y *= friction;
 
-// =============================================
+    this.x = this.x + this.velocity.x;
+    this.y = this.y + this.velocity.y;
+    this.alpha -= 0.01;
+  }
+}
+//-|--------------------------------------------|
 // Create player
 const player = new Player(x, y, 10, 'white');
-// Store Projectiles
-const projectiles = [];
-// Store Enemies
-const enemies = [];
 // Spawn Enemies
 function spawnEnemies() {
-  // Speed Multiplier
-  const enemySpeed = 1;
   setInterval(() => {
-    const radius = Math.random() * (30 - 5) + 5;
+    // TODO MAKE RESPONSIVE FOR MOBILE OR SMALL WINDOW SIZES
+    const radius = Math.random() * (40 - 7) + 7;
     let x;
     let y;
     if (Math.random() < 0.5) {
@@ -117,7 +152,7 @@ function spawnEnemies() {
       y = Math.random() < 0.5 ? 0 - radius : window.innerHeight + radius;
     }
 
-    const color = 'green';
+    const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
     const angle = Math.atan2(window.innerHeight / 2 - y, window.innerWidth / 2 - x);
     // Calculating velocities
     const velocity = {
@@ -134,8 +169,16 @@ function animate() {
   animationId = requestAnimationFrame(animate);
   // background
   c.fillStyle = 'rgba(0, 0, 0, 0.1)';
-  c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  // c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  c.fillRect(0, 0, window.innerWidth, window.innerHeight);
   player.draw();
+  particles.forEach((particle, i) => {
+    if (particle.alpha <= 0) {
+      particles.splice(i, 1);
+    } else {
+      particle.update();
+    }
+  });
   projectiles.forEach((projectile, i) => {
     projectile.update();
     // Remove projectiles from edge of screen
@@ -151,11 +194,11 @@ function animate() {
     }
   });
   // ---------------------------------------------------------------------
-  // Enemies Loop
+  // enemies Loop
   enemies.forEach((enemy, i) => {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
-    // End Game
+    // end Game
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationId);
       console.log('GAME OVER');
@@ -163,12 +206,34 @@ function animate() {
     }
     projectiles.forEach((projectile, index) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
-      //> Enemy and Projectiles touch
-      if (dist - enemy.radius - projectile.radius < 1) {
+      const removeEnemy = () => {
+        // removing enemy
         setTimeout(() => {
           enemies.splice(i, 1);
           projectiles.splice(index, 1);
         }, 0);
+      };
+      // enemy and projectiles touch
+      if (dist - enemy.radius - projectile.radius < 1) {
+        // creating particle explosions
+        for (let i = 0; i < enemy.radius * 2; i++) {
+          particles.push(
+            new Particle(projectile.x, projectile.y, Math.random() * 3, enemy.color, {
+              x: (Math.random() - 0.5) * (Math.random() * 6),
+              y: Math.random() - 0.5 * (Math.random() * 6),
+            })
+          );
+        }
+
+        if (enemy.radius - 10 > 10) {
+          gsap.to(enemy, { radius: enemy.radius - 10 });
+          setTimeout(() => {
+            projectiles.splice(index, 1);
+          }, 0);
+          // removeEnemy();
+        } else {
+          removeEnemy();
+        }
       }
     });
   });
@@ -184,7 +249,7 @@ addEventListener('click', e => {
     x: Math.cos(angle) * 2,
     y: Math.sin(angle) * 2,
   };
-  projectiles.push(new Projectile(x, y, 2, 'white', velocity));
+  projectiles.push(new Projectile(x, y, 4, 'white', velocity));
 });
 // ---------------------------------------------------------------------
 animate();
@@ -193,3 +258,5 @@ spawnEnemies();
 // 1) Get the angle
 // 2) put in atan2(x,y)** = angle
 // 3) x and y velocities from sig(angle) cos(angle)
+
+console.log(gsap); // oooooooOOOoOooOoooOooooOOOooH
