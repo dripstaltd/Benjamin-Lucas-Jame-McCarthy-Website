@@ -47,7 +47,7 @@ export const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 export const x = window.innerWidth / 2;
 export const y = window.innerHeight / 2;
-
+const menu = document.querySelector('.game__modal');
 // Store Projectiles
 const projectiles = [];
 // Store Enemies
@@ -141,6 +141,9 @@ class Particle {
   }
 }
 //-|--------------------------------------------|
+function toggleMenu() {
+  menu.classList.toggle('hidden');
+}
 // Create player
 const player = new Player(x, y, 10, 'white');
 // Spawn Enemies
@@ -209,8 +212,9 @@ function animate() {
     // end Game
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationId);
+      // GAMEOVER MENU
       console.log('GAME OVER');
-      // canvas.style.backgroundColor = 'red';
+      toggleMenu();
     }
     projectiles.forEach((projectile, index) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
@@ -250,7 +254,7 @@ function animate() {
     });
   });
 }
-// ---------------------------------------------------------------------
+// -----------------------------------------------
 // Rendering a projectile on mouse click event at the location of mouse
 addEventListener('click', e => {
   // Distance from click to center
@@ -262,7 +266,10 @@ addEventListener('click', e => {
   };
   projectiles.push(new Projectile(x, y, 4, 'white', velocity));
 });
-// ---------------------------------------------------------------------
+//------------------------------------------------
+
+
+
 animate();
 spawnEnemies();
 // Projectile physics
@@ -270,4 +277,4 @@ spawnEnemies();
 // 2) put in atan2(x,y)** = angle
 // 3) x and y velocities from sig(angle) cos(angle)
 
-console.log(gsap); // oooooooOOOoOooOoooOooooOOOooH
+
