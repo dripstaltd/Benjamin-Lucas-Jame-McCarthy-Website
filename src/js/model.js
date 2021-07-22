@@ -58,8 +58,11 @@ const particles = [];
 const enemySpeed = 0.7;
 // Particle slow down
 const friction = 0.99;
-// Score
+// Count missed projectiles
 
+// Deductions / Skill bonus
+
+// Score
 
 console.log(scoreEl);
 //-|--------------------------------------------|
@@ -227,9 +230,10 @@ function animate() {
       };
       // enemy and projectiles touch
       if (dist - enemy.radius - projectile.radius < 1) {
+        // Remove one count from projectileCounter
         // increase score
         score += 2;
-        scoreEl.textContent = `${score}`
+        scoreEl.textContent = `${score}`;
         console.log(score);
         // creating particle explosions
         for (let i = 0; i < enemy.radius * 2; i++) {
@@ -268,13 +272,9 @@ addEventListener('click', e => {
 });
 //------------------------------------------------
 
-
-
 animate();
 spawnEnemies();
 // Projectile physics
 // 1) Get the angle
 // 2) put in atan2(x,y)** = angle
 // 3) x and y velocities from sig(angle) cos(angle)
-
-
