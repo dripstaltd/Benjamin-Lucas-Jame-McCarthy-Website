@@ -16,13 +16,13 @@
   </head>
   <body>
     <div class="score"><span class="score__label">Score: </span><span class="score__value" id="score">0</span></div>
-    <div class="game__modal hidden">
-            <p class="game__modal--title">GAME OVER</p>
-            <p class="game__modal--score"><span>Score: </span><span>0</span></p>
-            <p class="game__modal--faults"><span>Deductions: </span><span>0</span></p>
-            <p class="game__modal--final"><span>Final score: </span><span>0</span></p>
-            <button class="close-modal">&times;</button>
-          </div>
+
+    <div class="game__modal">
+      <p class="game__modal--title"></p>
+      <p class="game__modal--score"><span>Score: </span><span id="finalScore">0</span></p>
+      <div><button id="gameBtn">Start Game</button></div>
+    </div>
+
     <canvas></canvas>
     <header>
       <video muted autoplay loop id="video-background">

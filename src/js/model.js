@@ -48,6 +48,8 @@ const c = canvas.getContext('2d');
 export const x = window.innerWidth / 2;
 export const y = window.innerHeight / 2;
 const menu = document.querySelector('.game__modal');
+const gameBtn = document.querySelector('#gameBtn');
+const viewScore = () => document.querySelector('.score').classList.toggle('hidden');
 // Store Projectiles
 const projectiles = [];
 // Store Enemies
@@ -149,6 +151,9 @@ function toggleMenu() {
 }
 // Create player
 const player = new Player(x, y, 10, 'white');
+
+let gameState = 0;
+
 // Spawn Enemies
 function spawnEnemies() {
   setInterval(() => {
@@ -217,7 +222,14 @@ function animate() {
       cancelAnimationFrame(animationId);
       // GAMEOVER MENU
       console.log('GAME OVER');
+      gameBtn.textContent = 'Finish';
+      document.querySelector('#finalScore').textContent = `${score} Points`;
       toggleMenu();
+      viewScore();
+      gameBtn.addEventListener('click', function () {
+        canvas.classList.add('hidden');
+        toggleMenu();
+      });
     }
     projectiles.forEach((projectile, index) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
@@ -272,9 +284,21 @@ addEventListener('click', e => {
 });
 //------------------------------------------------
 
-animate();
-spawnEnemies();
 // Projectile physics
 // 1) Get the angle
 // 2) put in atan2(x,y)** = angle
 // 3) x and y velocities from sig(angle) cos(angle)
+viewScore();
+gameBtn.addEventListener('click', function () {
+  viewScore();
+  gameState = 1;
+  toggleMenu();
+  startStop();
+});
+
+const startStop = () => {
+  if (gameState === 1) {
+    animate();
+    spawnEnemies();
+  }
+};
